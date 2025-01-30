@@ -10,7 +10,6 @@ public static class DbConfigs
         services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(configuration["DB_CONNECTION_STRING"]));
         
         
-        
         return services;
     }
 }

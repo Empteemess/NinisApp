@@ -5,6 +5,7 @@ using Amazon.S3.Transfer;
 using Application.Dto;
 using Application.IServices;
 using Application.Mappers;
+using Application.Mappers.Image;
 using Domain.CustomExceptions;
 using Domain.Enity;
 using Domain.IRepositories;
