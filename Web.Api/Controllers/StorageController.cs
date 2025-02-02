@@ -16,6 +16,14 @@ public class StorageController : ControllerBase
         _storageService = storageService;
     }
 
+    
+    [HttpPut]
+    public async Task<IActionResult> AddImageInCategory(AddImageToCategoryDto addImageDto)
+    {
+        await _storageService.AddImageToCategory(addImageDto);
+        return Ok($"image added in {addImageDto.CategoryName}");
+    }
+    
     [HttpDelete]
     public async Task DeleteComicsByCategoryName(string categoryName)
     {

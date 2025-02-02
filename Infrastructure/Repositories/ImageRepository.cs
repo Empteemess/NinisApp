@@ -15,6 +15,11 @@ public class ImageRepository : IImageRepository
         _images = context.Set<Image>();
     }
 
+    public void UpdateImageAsync(Image image)
+    {
+        _images.Update(image);
+    }
+
     public async Task AddImageAsync(Image image)
     {
         await _images.AddAsync(image);
@@ -24,14 +29,15 @@ public class ImageRepository : IImageRepository
     {
         _images.Remove(image);
     }
-    
+
     public async Task UpdateCategoryNameByIdAsync(Guid categoryId, string newName)
     {
         var images = await _images.FirstOrDefaultAsync(x => x.Id == categoryId);
         images.CategoryName = newName;
-        
+
         _images.Update(images);
     }
+
     public async Task<Image> GetByCategoryById(Guid categoryId)
     {
         var images = await _images
@@ -39,6 +45,7 @@ public class ImageRepository : IImageRepository
             .FirstOrDefaultAsync(x => x.Id == categoryId);
         return images;
     }
+
     public async Task<Image> GetByCategoryByName(string categoryName)
     {
         var images = await _images

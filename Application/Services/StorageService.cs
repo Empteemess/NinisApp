@@ -42,7 +42,45 @@ public class StorageService : IStorageService
 
         _transferUtility = new TransferUtility(s3Client);
     }
-    
+
+    public async Task AddImageToCategory(AddImageToCategoryDto addImageToCategoryDto)
+    {
+        var image = await _unitOfWork.IImageRepository.GetByCategoryByName(addImageToCategoryDto.CategoryName);
+        if (image is null)
+            throw new ImageException("Category not exists", StatusCodes.Status404NotFound);
+
+        var imageCheck = IsImageFile(addImageToCategoryDto.Image);
+        if (!imageCheck)
+            throw new ImageException("Invalid image format", StatusCodes.Status409Conflict);
+
+        //Memory Streams
+        var memoryStream = await ConvertImageToMemoryStream(addImageToCategoryDto.Image);
+
+        //Convert To WebP
+        var webpImage = await ConvertImageToWebp(memoryStream);
+
+        var guid = Guid.NewGuid();
+
+        var filePath =
+            $"{addImageToCategoryDto.CategoryName}/{guid}{Path.GetExtension(addImageToCategoryDto.Image.FileName)}";
+
+        var transferUtilityUploadRequest = new TransferUtilityUploadRequest
+        {
+            BucketName = _bucketName,
+            CannedACL = S3CannedACL.NoACL,
+            Key = filePath,
+            InputStream = webpImage
+        };
+
+        var imageLinks = image.ImageLinks.ToList();
+        imageLinks.Add(filePath);
+        image.ImageLinks = imageLinks;
+        
+        _unitOfWork.IImageRepository.UpdateImageAsync(image);
+        await _unitOfWork.SaveChangesAsync();
+        await _transferUtility.UploadAsync(transferUtilityUploadRequest);
+    }
+
     public async Task RemoveCategoryByNameAsync(string categoryName)
     {
         var category = await CheckAndGetImageByCategoryName(categoryName);
@@ -51,7 +89,7 @@ public class StorageService : IStorageService
         {
             await _transferUtility.S3Client.DeleteObjectAsync(_bucketName, imageLink);
         }
-        
+
         _unitOfWork.IImageRepository.DeleteImage(category);
         await _unitOfWork.SaveChangesAsync();
     }
@@ -59,26 +97,26 @@ public class StorageService : IStorageService
     private async Task<Image> CheckAndGetImageByCategoryName(string categoryName)
     {
         var image = await _unitOfWork.IImageRepository.GetByCategoryByName(categoryName);
-        if(image is null)
-            throw new ImageException($"{categoryName} is not found",StatusCodes.Status404NotFound);
-        
-        if(image.ImageLinks is null)
-            throw new ImageException($"Links is not found",StatusCodes.Status404NotFound);
-        
+        if (image is null)
+            throw new ImageException($"{categoryName} is not found", StatusCodes.Status404NotFound);
+
+        if (image.ImageLinks is null)
+            throw new ImageException($"Links is not found", StatusCodes.Status404NotFound);
+
         return image;
     }
-    
+
     public async Task UploadFileAsync(GetImageDto getImageDto)
     {
-        await CategoryCheck(getImageDto.CategoryName);
-        
+        await ImageCheck(getImageDto.CategoryName);
+
         ConcurrentBag<ImagePath> imagePaths = [];
 
         await Parallel.ForEachAsync(getImageDto.Images, async (image, _) =>
         {
             var imageCheck = IsImageFile(image);
             if (!imageCheck)
-                throw new ImageException("Invalid image format",StatusCodes.Status409Conflict);
+                throw new ImageException("Invalid image format", StatusCodes.Status409Conflict);
 
             //Memory Streams
             var memoryStream = await ConvertImageToMemoryStream(image);
@@ -130,11 +168,12 @@ public class StorageService : IStorageService
         });
     }
 
-    private async Task CategoryCheck(string categoryName)
+    private async Task<Image> ImageCheck(string categoryName)
     {
         var category = await _unitOfWork.IImageRepository.GetByCategoryByName(categoryName);
         if (category is not null)
-            throw new ImageException("Category already exists",StatusCodes.Status403Forbidden);
+            throw new ImageException("Category already exists", StatusCodes.Status403Forbidden);
+        return category!;
     }
 
     private bool IsImageFile(IFormFile file)
