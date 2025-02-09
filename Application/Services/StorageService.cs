@@ -28,16 +28,20 @@ public class StorageService : IStorageService
 
         _s3Client = new AmazonS3Client(basicAwsCredentials, awsConfig);
     }
-
-    public async Task<PreSignedUrlResponseDto> GetPreSignedUrlAsync(PreSignedUrlRequestDto preSignedUrlRequestDto)
+    
+    //TODO:DeleteImagesByCategoryIdAsync
+    
+    
+    //TODO:Change to work with many request
+    public async Task<PreSignedUrlResponseDto> AddPreSignedUrlAsync(PreSignedUrlRequestDto preSignedUrlRequestDto)
     {
         var path = $"{preSignedUrlRequestDto.FolderName}/{Guid.NewGuid()}{preSignedUrlRequestDto.Extension}";
-        
+
         var preSignedUrlRequest = new GetPreSignedUrlRequest
         {
             Verb = HttpVerb.PUT,
             BucketName = _bucketName,
-            Key = preSignedUrlRequestDto.FolderName,
+            Key = path,
             Expires = DateTime.UtcNow.AddSeconds(30),
         };
 
@@ -48,7 +52,7 @@ public class StorageService : IStorageService
             PreSignedUrl = preSignedUrl,
             ImagePath = path
         };
-        
+
         return result;
     }
 }

@@ -4,5 +4,6 @@ namespace Application.IServices;
 
 public interface IStorageService
 {
-    Task<PreSignedUrlResponseDto> GetPreSignedUrlAsync(PreSignedUrlRequestDto preSignedUrlRequestDto);
+    // Task<string> DeletePreSignedUrlAsync(string url);    
+    Task<PreSignedUrlResponseDto> AddPreSignedUrlAsync(PreSignedUrlRequestDto preSignedUrlRequestDto);
 }

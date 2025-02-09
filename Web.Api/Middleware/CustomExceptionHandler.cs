@@ -11,7 +11,7 @@ public class CustomExceptionHandler : IMiddleware
         {
             await next.Invoke(context);
         }
-        catch (ImageException exception)
+        catch (CategoryException exception)
         {
             context.Response.StatusCode = exception.StatusCode;
             await context.Response.WriteAsJsonAsync(new

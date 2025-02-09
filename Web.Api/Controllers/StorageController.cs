@@ -15,10 +15,18 @@ public class StorageController : ControllerBase
         _storageService = storageService;
     }
 
+    //
+    // [HttpDelete("{url}")]
+    // public async Task<IActionResult> DeletePreSignUrl(string url)
+    // {
+    //     var deleteRequest = await _storageService.DeletePreSignedUrlAsync(url);
+    //     return Ok(new {DeletePreSignUrl = deleteRequest});
+    // }
+
     [HttpPut("signedUrl")]
-    public async Task<IActionResult> GetPreSignedUrl(PreSignedUrlRequestDto requestDto)
+    public async Task<IActionResult> AddPreSignedUrl(PreSignedUrlRequestDto requestDto)
     {
-        var preSignedRequestResult = await _storageService.GetPreSignedUrlAsync(requestDto);
+        var preSignedRequestResult = await _storageService.AddPreSignedUrlAsync(requestDto);
         return Ok(preSignedRequestResult);
     }
 }
