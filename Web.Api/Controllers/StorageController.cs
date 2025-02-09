@@ -1,3 +1,4 @@
+using Application.Dto.Storage;
 using Application.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,5 +13,12 @@ public class StorageController : ControllerBase
     public StorageController(IStorageService storageService)
     {
         _storageService = storageService;
+    }
+
+    [HttpPut("signedUrl")]
+    public async Task<IActionResult> GetPreSignedUrl(PreSignedUrlRequestDto requestDto)
+    {
+        var preSignedRequestResult = await _storageService.GetPreSignedUrlAsync(requestDto);
+        return Ok(preSignedRequestResult);
     }
 }

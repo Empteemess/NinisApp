@@ -1,6 +1,8 @@
+using Application.Dto.Storage;
+
 namespace Application.IServices;
 
 public interface IStorageService
 {
-    Task<string> GetPreSignedUrlAsync(string folderName, string extension);
+    Task<PreSignedUrlResponseDto> GetPreSignedUrlAsync(PreSignedUrlRequestDto preSignedUrlRequestDto);
 }
