@@ -15,4 +15,13 @@ public class ImageRepository : Domain.IRepositories.IImageRepository
     }
     
     //TODO:GetImageById
+    public async Task<Image> GetImageById(Guid imageId)
+    {
+      var image = await _context.FindAsync(imageId);
+
+        if (image == null)
+            throw new ArgumentException($"Image with this : {imageId} id Not Found!");
+
+        return image;
+    }
 }

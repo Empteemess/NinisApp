@@ -13,4 +13,12 @@ public class ImageController : ControllerBase
     {
         _imageService = imageService;
     }
+
+    [HttpGet("{imageId")]
+    public async Task<IActionResult> GetImagebyId(Guid imageId)
+    {
+        var image = await _imageService.GetImageById(imageId);
+
+        return Ok(image);
+    }
 }
