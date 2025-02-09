@@ -29,4 +29,9 @@
       <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Dto\" />
+      <Folder Include="Mappers\Category\" />
+    </ItemGroup>
+
 </Project>

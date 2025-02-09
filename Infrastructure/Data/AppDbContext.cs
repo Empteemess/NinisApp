@@ -11,5 +11,5 @@ public class AppDbContext : DbContext
         
     }
 
-    public DbSet<Image> Image { get; set; }
+    public DbSet<Category> Categories { get; set; }
 }
