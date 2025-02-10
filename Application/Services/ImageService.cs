@@ -1,5 +1,8 @@
 ﻿using Application.Dto.Image;
+using Application.Mappers.ImageMapper;
+using Domain.CustomExceptions;
 using Domain.IRepositories;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services;
 
@@ -12,22 +15,16 @@ public class ImageService : IImageService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ImageDto> GetImageById(Guid iamgeId)
+    public async Task<ImageDto> GetImageById(Guid imageId)
     {
-        //აქ თუ რამე custom Exception გექნება ისევ
-        if(iamgeId == Guid.Empty) 
-            throw new ArgumentNullException(nameof(iamgeId));
+        if(imageId == Guid.Empty) 
+            throw new ImageException($"Image {imageId} is null",StatusCodes.Status204NoContent);
 
-        var image = await _unitOfWork.ImageRepository.GetImageById(iamgeId);
+        var image = await _unitOfWork.ImageRepository.GetImageById(imageId);
+        if(image is null)
+            throw new ImageException($"Image {imageId} not found",StatusCodes.Status404NotFound);
 
-        if(image == null)
-            throw new ArgumentNullException(nameof(image), "Image Not Found");
-
-        var imageDto = new ImageDto
-        {
-            Id = image.Id,
-            ImageLink = image.ImageLink
-        };
+        var imageDto = image.ToImageDto();
 
         return imageDto;
     }

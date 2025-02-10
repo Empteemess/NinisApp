@@ -30,7 +30,7 @@ public class CategoryController : ControllerBase
         return Ok(category);
     }
 
-    [HttpGet]
+    [HttpGet("names")]
     public async Task<IActionResult> GetCategoryNames()
     {
         var categoryNames = await _categoryService.GetCategoryNamesAsync();
@@ -39,10 +39,10 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddCategory(CategoryDto categoryDto)
+    public async Task<IActionResult> AddCategory(AddCategoryDto addCategoryDto)
     {
-        var newCategory = await _categoryService.AddCategoryAsync(categoryDto);
+        await _categoryService.AddCategoryAsync(addCategoryDto);
 
-        return Ok(newCategory);
+        return NoContent();
     }
 }

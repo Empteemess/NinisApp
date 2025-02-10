@@ -4,8 +4,8 @@ namespace Domain.IRepositories;
 
 public interface ICategoryRepository
 {
-    Task<Category?> GetCategoryById(Guid categoryId);
-    Task<IEnumerable<string>> GetCategoryNames();
-    Task<Category?> GetCategoryByCategoryName(string categoryName);
-    Task<Category?> AddCategory(Category category);
+    Task<Category?> GetCategoryByIdAsync(Guid categoryId);
+    Task<IEnumerable<string>?> GetCategoryNamesAsync();
+    Task<Category?> GetCategoryByCategoryNameAsync(string categoryName);
+    Task AddCategoryAsync(Category category);
 }

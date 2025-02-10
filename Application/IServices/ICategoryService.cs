@@ -7,6 +7,6 @@ public interface ICategoryService
 {
     Task<CategoryDto> GetCategoryByIdAsync(Guid categoryId);
     Task<CategoryDto?> GetCategoryByCategoryNameAsync(string categoryName);
-    Task<CategoryDto> AddCategoryAsync(CategoryDto categoryDto);
+    Task AddCategoryAsync(AddCategoryDto addCategoryDto);
     Task<IEnumerable<string>> GetCategoryNamesAsync();
 }

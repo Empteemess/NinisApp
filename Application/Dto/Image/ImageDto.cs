@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Application.Dto.Image;
 
-namespace Application.Dto.Image
+public class ImageDto
 {
-    public class ImageDto
-    {
-        public Guid Id { get; set; }
-        public required string ImageLink { get; set; }
-    }
+    public Guid Id { get; set; }
+    public required string ImageLink { get; set; }
 }

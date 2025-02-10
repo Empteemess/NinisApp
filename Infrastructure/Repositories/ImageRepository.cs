@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class ImageRepository : Domain.IRepositories.IImageRepository
+public class ImageRepository : IImageRepository
 {
     private readonly DbSet<Image> _context;
 
@@ -14,13 +14,9 @@ public class ImageRepository : Domain.IRepositories.IImageRepository
         _context = context.Set<Image>();
     }
     
-    //TODO:GetImageById
-    public async Task<Image> GetImageById(Guid imageId)
+    public async Task<Image?> GetImageById(Guid imageId)
     {
-      var image = await _context.FindAsync(imageId);
-
-        if (image == null)
-            throw new ArgumentException($"Image with this : {imageId} id Not Found!");
+      var image = await _context.FirstOrDefaultAsync(x => x.Id == imageId);
 
         return image;
     }

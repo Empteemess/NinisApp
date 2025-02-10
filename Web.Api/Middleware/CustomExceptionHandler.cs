@@ -1,5 +1,6 @@
 using System.Net;
 using Domain.CustomExceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web.Api.Middleware;
 
@@ -17,6 +18,32 @@ public class CustomExceptionHandler : IMiddleware
             await context.Response.WriteAsJsonAsync(new
             {
                 Error = exception.Message
+            });
+        }
+        catch (ImageException exception)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.Conflict;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                Error = exception.Message
+            });
+        }
+        catch (DbUpdateConcurrencyException exception)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.Conflict;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                Error = "A concurrency conflict occurred.",
+                Details = exception.Message
+            });
+        }
+        catch (DbUpdateException exception)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                Error = "A database update error occurred.",
+                Details = exception.InnerException?.Message ?? exception.Message
             });
         }
         catch (Exception exception)
