@@ -5,6 +5,7 @@ namespace Application.IServices;
 
 public interface ICategoryService
 {
+    Task AddImageInCategoryAsync(AddImageInCategoryDto addImageInCategoryDto);
     Task<CategoryDto> GetCategoryByIdAsync(Guid categoryId);
     Task<CategoryDto?> GetCategoryByCategoryNameAsync(string categoryName);
     Task AddCategoryAsync(AddCategoryDto addCategoryDto);

@@ -1,3 +1,4 @@
+using Application.IServices;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,13 @@ public class ImageController : ControllerBase
         _imageService = imageService;
     }
 
+    [HttpDelete]
+    public async Task<IActionResult> DeleteImageById([FromQuery] Guid imageId)
+    {
+        await _imageService.DeleteImageByIdAsync(imageId);
+        return NoContent();
+    }
+    
     [HttpGet("{imageId}")]
     public async Task<IActionResult> GetImageById(Guid imageId)
     {

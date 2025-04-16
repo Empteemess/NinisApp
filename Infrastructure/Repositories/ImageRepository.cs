@@ -13,6 +13,11 @@ public class ImageRepository : IImageRepository
     {
         _context = context.Set<Image>();
     }
+
+    public void DeleteImageAsync(Image image)
+    {
+        _context.Remove(image);
+    }
     
     public async Task<Image?> GetImageById(Guid imageId)
     {

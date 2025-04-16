@@ -1,8 +1,9 @@
 using Application.Dto.Image;
 
-namespace Application.Services;
+namespace Application.IServices;
 
 public interface IImageService
 {
+    Task DeleteImageByIdAsync(Guid imageId);
     Task<ImageDto> GetImageById(Guid imageId);
 }

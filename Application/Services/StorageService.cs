@@ -32,6 +32,18 @@ public class StorageService : IStorageService
 
         _s3Client = new AmazonS3Client(basicAwsCredentials, awsConfig);
     }
+
+    public async Task DeleteImageByUrlAsync(string imageUrl)
+    {
+        var deleteObjectRequest = new DeleteObjectRequest
+        {
+            BucketName = _bucketName,
+            Key = imageUrl
+        };
+
+        await _s3Client.DeleteObjectAsync(deleteObjectRequest);
+        await _unitOfWork.SaveChangesAsync();
+    }
     
     //TODO:DeleteImagesByCategoryIdAsync
     public async Task RemoveCategoryByCategoryId(Guid categoryId)

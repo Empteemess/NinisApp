@@ -15,11 +15,27 @@ public class CategoryService : ICategoryService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly string _baseUrl;
- 
-    public CategoryService(IUnitOfWork unitOfWork,IConfiguration config)
+
+    public CategoryService(IUnitOfWork unitOfWork, IConfiguration config)
     {
         _unitOfWork = unitOfWork;
         _baseUrl = config["AWS_BASE_URL"]!;
+    }
+
+    public async Task AddImageInCategoryAsync(AddImageInCategoryDto addImageInCategoryDto)
+    {
+        var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(addImageInCategoryDto.CategoryId)
+                       ?? throw new CategoryException($"category with {addImageInCategoryDto.CategoryId} not found",
+                           StatusCodes.Status404NotFound);
+
+        var images = addImageInCategoryDto.ImageUrls.Select(imageUrl => new Image { ImageLink = imageUrl });
+        
+        foreach (var image in images)
+        {
+            category.Images.Add(image);
+        }
+        
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<CategoryDto> GetCategoryByIdAsync(Guid categoryId)
@@ -49,7 +65,7 @@ public class CategoryService : ICategoryService
             throw new CategoryException($"Invalid category model", StatusCodes.Status400BadRequest);
 
         var category = addCategory.ToCategory();
-        
+
         await _unitOfWork.CategoryRepository.AddCategoryAsync(category);
         await _unitOfWork.SaveChangesAsync();
     }
@@ -67,7 +83,7 @@ public class CategoryService : ICategoryService
 
         return categoryDto;
     }
-    
+
     public async Task<IEnumerable<string>> GetCategoryNamesAsync()
     {
         var categoryNames = await _unitOfWork.CategoryRepository.GetCategoryNamesAsync() ?? [];
