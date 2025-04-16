@@ -7,23 +7,26 @@ using Domain.IRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Services;
 
 public class CategoryService : ICategoryService
 {
     private readonly IUnitOfWork _unitOfWork;
-
-    public CategoryService(IUnitOfWork unitOfWork)
+    private readonly string _baseUrl;
+ 
+    public CategoryService(IUnitOfWork unitOfWork,IConfiguration config)
     {
         _unitOfWork = unitOfWork;
+        _baseUrl = config["AWS_BASE_URL"]!;
     }
 
     public async Task<CategoryDto> GetCategoryByIdAsync(Guid categoryId)
     {
         var category = await CategoryCheckAsync(categoryId);
 
-        var categoryDto = category.ToCategoryDto();
+        var categoryDto = category.ToCategoryDto(_baseUrl);
 
         return categoryDto;
     }
@@ -60,7 +63,7 @@ public class CategoryService : ICategoryService
         if (category is null)
             throw new CategoryException($"Category Name: {categoryName} Not found", StatusCodes.Status404NotFound);
 
-        var categoryDto = category.ToCategoryDto();
+        var categoryDto = category.ToCategoryDto(_baseUrl);
 
         return categoryDto;
     }

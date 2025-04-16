@@ -28,16 +28,16 @@ public static class CategoryMappers
         return categoryDto;
     }
 
-    public static CategoryDto ToCategoryDto(this Category category)
+    public static CategoryDto ToCategoryDto(this Category category,string baseUrl)
     {
         var categoryDto = new CategoryDto
         {
             Id = category.Id,
             CategoryName = category.CategoryName,
-            ImageUrls = category.Images.Select(x => new ImageDto
+            ImageUrls = category.Images.Select(image => new ImageDto
             {
-                Id = x.Id,
-                ImageLink = x.ImageLink
+                Id = image.Id,
+                ImageLink = $"{baseUrl}/{image.ImageLink}"
             })
         };
 

@@ -41,12 +41,13 @@ public class StorageService : IStorageService
         var deleteObjRequest = new DeleteObjectsRequest
         {
             BucketName = _bucketName,
-            Objects = categoryWithImages.Select(x => new KeyVersion{Key = x}).ToList()
+            Objects = categoryWithImages.Select(imageUrl => new KeyVersion{Key = imageUrl}).ToList()
         };
 
         await _unitOfWork.CategoryRepository.DeleteCategoryById(categoryId);
 
         await _s3Client.DeleteObjectsAsync(deleteObjRequest);
+        await _unitOfWork.SaveChangesAsync();
     }
     
     //TODO:Change to work with many request
