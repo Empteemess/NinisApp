@@ -20,4 +20,12 @@ public class ImageRepository : IImageRepository
 
         return image;
     }
+    public async Task<IEnumerable<string>> GetImagesByCategoryId(Guid categoryId)
+    {
+        var image = _context.AsNoTracking().Where(x => x.CategoryId == categoryId);
+
+        var imageUrls = image.Select(x => x.ImageLink);
+        
+        return imageUrls;
+    }
 }

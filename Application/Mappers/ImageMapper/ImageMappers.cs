@@ -5,12 +5,12 @@ namespace Application.Mappers.ImageMapper;
 
 public static class ImageMappers
 {
-    public static ImageDto ToImageDto(this Image image)
+    public static ImageDto ToImageDto(this Image image,string baseUrl)
     {
         var imageDto = new ImageDto
         {
             Id = image.Id,
-            ImageLink = image.ImageLink,
+            ImageLink = $"{baseUrl}/{image.ImageLink}",
         };
 
         return imageDto;

@@ -1,4 +1,5 @@
 using System.Net;
+using Amazon.S3;
 using Domain.CustomExceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,6 +44,14 @@ public class CustomExceptionHandler : IMiddleware
             await context.Response.WriteAsJsonAsync(new
             {
                 Error = "A database update error occurred.",
+                Details = exception.InnerException?.Message ?? exception.Message
+            });
+        }
+        catch (DeleteObjectsException  exception)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            await context.Response.WriteAsJsonAsync(new
+            {
                 Details = exception.InnerException?.Message ?? exception.Message
             });
         }

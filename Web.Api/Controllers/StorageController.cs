@@ -15,6 +15,13 @@ public class StorageController : ControllerBase
         _storageService = storageService;
     }
 
+    [HttpDelete("{categoryId:guid}")]
+    public async Task<IActionResult> DeleteCategoryWithImages(Guid categoryId)
+    {
+        await _storageService.RemoveCategoryByCategoryId(categoryId);
+        return NoContent();
+    }
+
     [HttpPut("signedUrl")]
     public async Task<IActionResult> AddPreSignedUrl(PreSignedUrlRequestDto requestDto)
     {
