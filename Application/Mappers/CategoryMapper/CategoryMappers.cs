@@ -6,23 +6,16 @@ namespace Application.Mappers.CategoryMapper;
 
 public static class CategoryMappers
 {
-    public static AddCategoryDto ToAddCategoryDto(this Category category)
-    {
-        var categoryDto = new AddCategoryDto
-        {
-            CategoryName = category.CategoryName,
-            ImageUrls = category.Images.Select(x => x.ImageLink)
-        };
-
-        return categoryDto;
-    }
-
     public static Category ToCategory(this AddCategoryDto category)
     {
         var categoryDto = new Category
         {
             CategoryName = category.CategoryName,
-            Images = category.ImageUrls.Select(url => new Image { ImageLink = url }).ToList()
+            Images = category.CategoryImages.Select(url => new Image
+            {
+                ImageLink = url.ImageUrl,
+                ImageName = url.ImageName
+            }).ToList()
         };
 
         return categoryDto;
@@ -34,10 +27,11 @@ public static class CategoryMappers
         {
             Id = category.Id,
             CategoryName = category.CategoryName,
-            ImageUrls = category.Images.Select(image => new ImageDto
+            Images = category.Images.Select(image => new ImageDto
             {
                 Id = image.Id,
-                ImageLink = $"{baseUrl}/{image.ImageLink}"
+                ImageUrl = $"{baseUrl}/{image.ImageLink}",
+                ImageName = image.ImageName ?? "DefaultImageName"
             })
         };
 

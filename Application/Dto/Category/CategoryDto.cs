@@ -6,6 +6,6 @@ public class CategoryDto
 {
     public Guid Id { get; set; }
     public required string CategoryName { get; set; }
-    public required IEnumerable<ImageDto> ImageUrls { get; set; }
+    public required IEnumerable<ImageDto> Images { get; set; }
 
 }

@@ -18,9 +18,18 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<IEnumerable<string>?> GetCategoryNamesAsync()
     {
-        var categories = await _categories.AsNoTracking().Select(x => x.CategoryName).ToListAsync();
+        var characterCategories = new List<string> { "body", "bottom", "hair", "shoes", "top" };
 
-        return categories;
+        var categories = await _categories
+            .AsNoTracking()
+            .Select(x => x.CategoryName)
+            .ToListAsync();
+
+
+        var filteredCategoryNames =
+            categories.Where(x => !characterCategories.Contains(x, StringComparer.OrdinalIgnoreCase));
+
+        return filteredCategoryNames;
     }
 
     public async Task<Category?> GetCategoryByCategoryNameAsync(string name)
@@ -40,11 +49,11 @@ public class CategoryRepository : ICategoryRepository
     public async Task DeleteCategoryById(Guid categoryId)
     {
         var category = await _categories.FirstOrDefaultAsync(x => x.Id == categoryId);
-        
-       var ss = _categories.Remove(category);
-       
-       if(ss.State != EntityState.Deleted)
-           throw new CategoryException($"Category {categoryId} cannot be deleted",(int)HttpStatusCode.BadRequest);
+
+        var ss = _categories.Remove(category);
+
+        if (ss.State != EntityState.Deleted)
+            throw new CategoryException($"Category {categoryId} cannot be deleted", (int)HttpStatusCode.BadRequest);
     }
 
     public async Task<Category?> GetCategoryByIdAsync(Guid categoryId)

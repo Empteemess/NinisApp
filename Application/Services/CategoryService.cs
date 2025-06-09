@@ -28,7 +28,11 @@ public class CategoryService : ICategoryService
                        ?? throw new CategoryException($"category with {addImageInCategoryDto.CategoryId} not found",
                            StatusCodes.Status404NotFound);
 
-        var images = addImageInCategoryDto.ImageUrls.Select(imageUrl => new Image { ImageLink = imageUrl });
+        var images = addImageInCategoryDto.CategoryImages.Select(img => new Image
+        {
+            ImageLink = img.ImageUrl,
+            ImageName = img.ImageName ?? "DefaultImageName"
+        });
         
         foreach (var image in images)
         {
@@ -62,7 +66,7 @@ public class CategoryService : ICategoryService
     public async Task AddCategoryAsync(AddCategoryDto addCategory)
     {
         if (addCategory is null)
-            throw new CategoryException($"Invalid category model", StatusCodes.Status400BadRequest);
+            throw new CategoryException("Invalid category model", StatusCodes.Status400BadRequest);
 
         var category = addCategory.ToCategory();
 
@@ -73,7 +77,7 @@ public class CategoryService : ICategoryService
     public async Task<CategoryDto?> GetCategoryByCategoryNameAsync(string categoryName)
     {
         if (categoryName is null)
-            throw new CategoryException($"Incorrect category Name format", StatusCodes.Status400BadRequest);
+            throw new CategoryException("Incorrect category Name format", StatusCodes.Status400BadRequest);
 
         var category = await _unitOfWork.CategoryRepository.GetCategoryByCategoryNameAsync(categoryName);
         if (category is null)

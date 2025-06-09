@@ -3,5 +3,5 @@
 public class AddCategoryDto
 {
     public required string CategoryName { get; set; }
-    public required IEnumerable<string> ImageUrls { get; set; }
+    public required IEnumerable<CategoryImageDto> CategoryImages { get; set; }
 }

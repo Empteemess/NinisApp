@@ -10,7 +10,8 @@ public static class ImageMappers
         var imageDto = new ImageDto
         {
             Id = image.Id,
-            ImageLink = $"{baseUrl}/{image.ImageLink}",
+            ImageUrl = $"{baseUrl}/{image.ImageLink}",
+            ImageName = image.ImageName ?? "DefaultImageName"
         };
 
         return imageDto;
