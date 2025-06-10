@@ -15,8 +15,8 @@ namespace Infrastructure.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CategoryName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,9 +27,10 @@ namespace Infrastructure.Migrations
                 name: "Images",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImageLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ImageLink = table.Column<string>(type: "text", nullable: false),
+                    ImageName = table.Column<string>(type: "text", nullable: true),
+                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
