@@ -16,7 +16,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost("image")]
-    public async Task<IActionResult> GetCategoriesById(AddImageInCategoryDto addImageInCategoryDto)
+    public async Task<IActionResult> AddImageInCategory(AddImageInCategoryDto addImageInCategoryDto)
     {
          await _categoryService.AddImageInCategoryAsync(addImageInCategoryDto);
         return NoContent();

@@ -4,5 +4,5 @@ public class AddImageInCategoryDto
 {
     public Guid CategoryId { get; set; }
 
-    public required IEnumerable<string> ImageUrls { get; set; }
+    public required IEnumerable<CategoryImageDto> CategoryImages { get; set; }
 }
