@@ -23,11 +23,15 @@ public class Program
 
         builder.Services.AddDbConfigs(builder.Configuration);
         builder.Services.AddServices();
-        
+
+        builder.Services.AddCors();
+
         var app = builder.Build();
 
         app.UseSwagger();
         app.UseSwaggerUI();
+
+        app.UseCors();
         
         app.UseHttpsRedirection();
 
