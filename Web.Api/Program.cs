@@ -24,7 +24,15 @@ public class Program
         builder.Services.AddDbConfigs(builder.Configuration);
         builder.Services.AddServices();
 
-        builder.Services.AddCors();
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
 
         var app = builder.Build();
 
@@ -32,11 +40,11 @@ public class Program
         app.UseSwaggerUI();
 
         app.UseCors();
-        
+
         app.UseHttpsRedirection();
 
         app.UseMiddleware<CustomExceptionHandler>();
-        
+
         app.UseAuthorization();
 
         app.MapControllers();
