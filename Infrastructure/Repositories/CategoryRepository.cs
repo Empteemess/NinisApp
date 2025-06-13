@@ -36,7 +36,7 @@ public class CategoryRepository : ICategoryRepository
     {
         var category = await _categories.AsNoTracking()
             .Include(x => x.Images)
-            .FirstOrDefaultAsync(x => x.CategoryName.ToLower() == name);
+            .FirstOrDefaultAsync(x => x.CategoryName.ToLower() == name.ToLower());
 
         return category;
     }
