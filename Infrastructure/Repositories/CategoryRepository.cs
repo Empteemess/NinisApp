@@ -18,7 +18,7 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<IEnumerable<string>?> GetCategoryNamesAsync()
     {
-        var characterCategories = new List<string> { "body", "bottom", "hair", "shoes", "top" };
+        var characterCategories = new List<string> { "body", "bottom", "hair", "shoes", "top","backgrounds" };
 
         var categories = await _categories
             .AsNoTracking()
